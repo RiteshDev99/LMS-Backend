@@ -20,6 +20,12 @@ export class AuthService {
     // 3. store the user into db
     // 4. generate a JWT token
     // 5. send token in response
-    return this.userService.createUser({...registerUserDto, password: hashedPassword});
+    const user = await this.userService.createUser({
+      ...registerUserDto,
+      password: hashedPassword,
+    });
+    console.log('user', user);
+
+    return {};
   }
 }
