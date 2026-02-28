@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { RegisterDto } from './dto/registerUser.dto';
 import bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class AuthService {
@@ -18,12 +19,6 @@ export class AuthService {
       saltRounds,
     );
     console.log('registerUserDto', registerUserDto);
-    // Logic to register a user (e.g., save to database)
-    // 1. V check if email is already exists
-    // 2. V hash the password
-    // 3. V store the user into db
-    // 4. generate a JWT token
-    // 5. send token in response
     const user = await this.userService.createUser({
       ...registerUserDto,
       password: hashedPassword,
@@ -33,5 +28,29 @@ export class AuthService {
     const token = await this.jwtService.signAsync(payload);
     console.log('Token', token);
     return { access_token: token };
+  }
+
+  async login(loginDto: LoginDto) {
+    const user = await this.userService.findByEmail(loginDto.email);
+
+    if (!user) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid email or password');
+    }
+
+    const payload = { sub: user._id };
+
+    const token = await this.jwtService.signAsync(payload);
+
+    return {
+      access_token: token,
+    };
   }
 }
