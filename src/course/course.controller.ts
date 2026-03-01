@@ -28,8 +28,8 @@ export class CourseController {
   }
 
   @Get()
-  findAll() {
-    return this.courseService.findAll();
+  async findAll() {
+    return await this.courseService.findAll();
   }
 
   @Get(':id')
