@@ -1,99 +1,211 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# LMS Backend (NestJS)
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A small Library Management System (LMS) backend built with NestJS, MongoDB (Mongoose), and JWT-based authentication.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+This repository contains a simple API for user registration/login, role-based course management (Admin), and public course listing.
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Project overview
+This project is a starter backend for an LMS. It implements:
+- User registration and login with hashed passwords and JWT authentication.
+- Role-based access control (Admin / Student).
+- Course CRUD operations (create/update/delete restricted to Admins).
+- Mongoose schemas for persisting users and courses.
 
-## Project setup
+Files to look at for core behavior:
+- `src/main.ts` - app bootstrap
+- `src/app.module.ts` - module wiring (Config, Mongoose, modules)
+- `src/auth/*` - authentication controllers, services, JWT setup
+- `src/course/*` - course controller, service, DTOs and schema
+- `src/user/*` - user service, schema, and role types
 
-```bash
-$ pnpm install
-```
 
-## Compile and run the project
+## Features
+- Register and login users
+- JWT-based protected endpoints
+- Role-based authorization (Admin-only course management)
+- Input validation using class-validator
 
-```bash
-# development
-$ pnpm run start
 
-# watch mode
-$ pnpm run start:dev
+## Tech stack
+- Node.js + TypeScript
+- NestJS (modular architecture)
+- MongoDB via Mongoose
+- JWT for auth
+- Jest + Supertest for tests
 
-# production mode
-$ pnpm run start:prod
-```
 
-## Run tests
+## Quick start
+1. Clone the repo
+
+2. Install dependencies
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm install
 ```
 
-## Deployment
+3. Create a `.env` file in the project root (see Environment Variables below)
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+4. Start the app in development
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+The server will start on PORT (default 3000). The root route (`GET /`) returns a simple "Hello World!" message.
 
-## Resources
 
-Check out a few resources that may come in handy when working with NestJS:
+## Environment variables
+Create a `.env` file in the project root with at least the following values:
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```env
+PORT=3000
+MONGODB_URL=mongodb://localhost:-----
+JWT_SECRET=your_jwt_secret_here
+NODE_ENV=development
+```
 
-## Support
+Notes:
+- `MONGODB_URL` is used by `MongooseModule.forRoot(...)` in `AppModule`.
+- `JWT_SECRET` is used by the `JwtModule` in `AuthModule` and by the custom `AuthGuard`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
 
-## Stay in touch
+## Available scripts (from package.json)
+- pnpm run build — build the project (nest build)
+- pnpm run start — start the built app
+- pnpm run start:dev — run in watch mode (development)
+- pnpm run start:prod — run production build (node dist/main)
+- pnpm run lint — run eslint
+- pnpm run format — format code with Prettier
+- pnpm run test — run unit tests (jest)
+- pnpm run test:e2e — run e2e tests
+- pnpm run test:cov — coverage
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## API summary
+All endpoints are relative to the API root (e.g., http://localhost:3000)
+
+Root
+- GET / => returns a simple string ("Hello World!")
+
+Auth (prefix: `/auth`)
+- POST /auth/register
+  - Body: RegisterDto { fname, lname, email, password }
+  - Registers a user, returns { access_token }
+- POST /auth/login
+  - Body: LoginDto { email, password }
+  - Returns { access_token }
+- GET /auth/profile
+  - Protected (Bearer token). Returns basic user info: { id, fname, lname, email }
+
+Courses (prefix: `/courses`)
+- GET /courses
+  - Public: returns all courses
+- GET /courses/:id
+  - Public: returns a single course by id
+- POST /courses
+  - Protected, Admin only: Create a course
+  - Body: CreateCourseDto { name, description, level, price }
+- PATCH /courses/:id
+  - Protected, Admin only: Update a course (partial body allowed)
+- DELETE /courses/:id
+  - Protected, Admin only: Delete a course
+
+Auth & Roles
+- The project uses a custom `AuthGuard` which verifies JWT tokens from the `Authorization: Bearer <token>` header.
+- Role-based authorization leverages a `Roles` decorator and `RolesGuard` (controllers use `@Roles(Role.Admin)` for Admin-only actions).
+- Roles available: `admin`, `student` (see `src/user/types/user.types.ts`).
+
+
+## Data models & DTOs (summary)
+User (schema: `src/user/schemas/userSchema.ts`)
+- fname: string (required)
+- lname: string (required)
+- email: string (required, unique)
+- password: string (required, hashed before storage)
+- role: string (default: `student`)
+
+Course (schema: `src/course/schemas/course.schema.ts`)
+- name: string (required)
+- description: string (required)
+- level: string (required)
+- price: number (required)
+
+DTOs validate incoming requests using `class-validator`:
+- RegisterDto: fname, lname, email (email), password
+- LoginDto: email, password
+- CreateCourseDto: name, description, level, price (price is number)
+- UpdateCourseDto: PartialType(CreateCourseDto) — partial updates allowed
+
+
+## Examples (curl)
+Register a user
+
+```bash
+curl -X POST http://localhost:3000/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"fname":"Alice","lname":"Doe","email":"alice@example.com","password":"secret"}'
+```
+
+Login to get a token
+
+```bash
+curl -X POST http://localhost:3000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"alice@example.com","password":"secret"}'
+```
+
+Use the returned access_token for protected endpoints (replace <TOKEN> below):
+
+Get profile
+
+```bash
+curl -H "Authorization: Bearer <TOKEN>" http://localhost:3000/auth/profile
+```
+
+Create a course (Admin only)
+
+```bash
+curl -X POST http://localhost:3000/courses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <TOKEN>" \
+  -d '{"name":"Intro to NestJS","description":"Learn Nest","level":"beginner","price":99}'
+```
+
+
+## Tests
+- Unit tests: `pnpm run test`
+- E2E tests: `pnpm run test:e2e`
+
+See `jest` section in `package.json` for configuration.
+
+
+## Contributing
+- Follow the existing code style (Prettier + ESLint). Run `pnpm run format` and `pnpm run lint` before submitting PRs.
+- Add tests for new functionality.
+- Open an issue first if the change is significant.
+
+
+## Troubleshooting
+- If Mongo connection fails, ensure `MONGODB_URL` is set and MongoDB is running.
+- If JWT verification fails, make sure `JWT_SECRET` in `.env` matches the secret used when generating tokens.
+- Use `pnpm run start:dev` for live reload and easier debugging.
+
+
+## Next steps & suggestions
+- Add Swagger/OpenAPI docs with `@nestjs/swagger` for automatic API docs.
+- Add a CI workflow (GitHub Actions) to run tests and lint on PRs.
+- Add more unit and e2e tests and example Postman collection.
+
 
 ## License
+This project currently declares `UNLICENSED` in `package.json`. Check `package.json` or add a proper LICENSE file if you plan to open-source it.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-# LMS-Backend
+
+---
+
+If you want, I can also:
+- generate a Postman collection or OpenAPI spec from the controllers,
+- add a `.env.example` file,
+- wire up Swagger endpoints,
+- or expand the README with an exhaustive API reference (fields, response examples) — tell me which you'd prefer.
