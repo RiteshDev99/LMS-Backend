@@ -24,7 +24,7 @@ export class AuthService {
       password: hashedPassword,
     });
 
-    const payload = { sub: user._id, role: 'admin' };
+    const payload = { sub: user._id };
     const token = await this.jwtService.signAsync(payload);
     console.log('Token', token);
     return { access_token: token };

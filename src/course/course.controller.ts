@@ -38,10 +38,16 @@ export class CourseController {
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
+  async update(
+    @Param('id') id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ) {
     return await this.courseService.update(id, updateCourseDto);
   }
-
+  @UseGuards(AuthGuard, RolesGuard)
+  @Roles(Role.Admin)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.courseService.remove(id);
